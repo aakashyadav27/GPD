@@ -12,9 +12,15 @@ from functions import *
 app = Flask(__name__)
 data=pd.read_excel('planisware_data.xlsx')
 print(data.columns)
-NTID={"camachodj":"Cintron,Debra J","dentp":"Dent,Philip Damian"}
 
+
+sample={
+    "value":[]
+}
 def username_mapping(input_dicto):
+    sample1= {
+        "value": []
+    }
     new_dict=json.loads(input_dicto)
     for k, v in new_dict.items():
         print("yes")
@@ -25,10 +31,14 @@ def username_mapping(input_dicto):
             new_dict[k] = "Dent,Philip Damian"
         else:
             pass
-    new_dict=json.dumps(new_dict)
+    for k, v in new_dict.items():
+        ap1 = {"owner": v}
+        sample1['value'].append(ap1)
+    new_dict=json.dumps(sample1)
     return new_dict
 
 def ntid_mapping(ntid_dict):
+
     #print(type(ntid_dict))
     ntid_dictn = ntid_dict
     for k, v in ntid_dictn .items():
@@ -39,6 +49,7 @@ def ntid_mapping(ntid_dict):
             ntid_dictn[k] = "dentp"
         else:
             pass
+    #new_dict=json.dumps(sample)
     #ntid_dictn = json.dumps(ntid_dictn)
     return ntid_dictn
 
@@ -75,6 +86,9 @@ def GetOwnerList():
     
 @app.route("/projectList", methods=['POST'])
 def Projectnames():
+    sample2 = {
+        "value": []
+    }
     content_type1 = request.headers.get('Content-Type')
     category1 = request.json
     if any(category1.values()):
@@ -82,9 +96,23 @@ def Projectnames():
         new_data=data[data['Owner'] == category1['username']]
         new_data= pd.Series(new_data['Name'].reset_index(drop='index').unique())
         new_data = new_data.to_json()
+        new_data=json.loads(new_data)
+        print(type(new_data),'================================')
+        for k, v in new_data.items():
+            ap2 = {"name": v}
+            sample2['value'].append(ap2)
+        new_data=sample2
+        new_data = json.dumps(new_data)
     else:
         new_data = pd.Series(data['Name'].reset_index(drop='index').unique())
         new_data = new_data.to_json()
+        new_data = json.loads(new_data)
+        print(type(new_data), '================================')
+        for k, v in new_data.items():
+            ap2 = {"name": v}
+            sample2['value'].append(ap2)
+        new_data = sample2
+        new_data = json.dumps(new_data)
     return new_data
 
 """
