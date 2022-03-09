@@ -31,7 +31,9 @@ def GetOwnerList():
                     else:
                         output_data = output_data[output_data[k] == v]
         else:
-            return 'No filter selected'
+            no_filter_selected=pd.Series(data['Owner'].reset_index(drop='index').unique())
+            no_filter_selected = no_filter_selected.to_json()
+            return  no_filter_selected
         output_data = pd.Series(output_data['Owner'].reset_index(drop='index').unique())
         output_data= output_data.to_json()
         return output_data
