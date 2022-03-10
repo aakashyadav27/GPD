@@ -61,7 +61,6 @@ def hello_world():
     return render_template('index.html')
 
 @app.route("/ownerList", methods=['POST'])
-@cross_origin()
 def GetOwnerList():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
@@ -88,7 +87,6 @@ def GetOwnerList():
         return 'Not found'
     
 @app.route("/projectList", methods=['POST'])
-@cross_origin()
 def Projectnames():
     sample2 = {
         "value": []
