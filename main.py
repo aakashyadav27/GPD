@@ -7,9 +7,11 @@ import os
 import requests
 from flask import Flask, redirect, request, url_for, jsonify, render_template, make_response
 import pandas as pd
+from flask_cors import CORS
 from functions import *
 
 app = Flask(__name__)
+CORS(app)
 data=pd.read_excel('planisware_data.xlsx')
 print(data.columns)
 
