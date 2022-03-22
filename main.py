@@ -12,7 +12,7 @@ from functions import *
 
 app = Flask(__name__)
 CORS(app)
-data=pd.read_excel('planisware_data.xlsx')
+data=pd.read_excel('planisware_data_1.xlsx')
 print(data.columns)
 
 
@@ -94,6 +94,7 @@ def Projectnames():
     content_type1 = request.headers.get('Content-Type')
     category1 = request.json
     if any(category1.values()):
+
         category1=ntid_mapping(category1)
         new_data=data[data['Owner'] == category1['username']]
         new_data= pd.Series(new_data['Name'].reset_index(drop='index').unique())
@@ -117,44 +118,26 @@ def Projectnames():
         new_data = json.dumps(new_data)
     return new_data
 
-"""
-@app.route("/ownerList", methods=['POST'])
-def GetOwnerList():
-    content_type = request.headers.get('Content-Type')
-    print(content_type)
-    if (content_type == 'application/json'):
-        category = request.json
-        all_json = json.dumps(category)
-        res = json.loads(all_json)
-        URL = ownerName(res)
-        if URL != 'No filter selected':
-            r = requests.get(url=URL, headers=headers)
-            data = r.json()
-            # pd.DataFrame(res['value'])['owner'].tolist()
-            data = json.dumps(data)
-            return (data, URL)
-        else:
-            return URL
+
+@app.route("/activityData", methods=['POST'])
+def activity_data():
+    final_data={}
+    input2 = request.json
+    #try:
+    print(any(input2.values()))
+    if any(input2.values()):
+        for x in range(len(input2['value'])):
+            new_data=input2['value'][x]['project_name']
+            f = open('{}.json'.format(new_data))
+            data = json.load(f)
+            #print(type(data))
+            final_data['activity{}'.format(x)]=data['value'][0]
+        data =json.dumps(final_data)
+        return data
     else:
-        return 'Content-Type not supported!'
-
-
-@app.route("/projectList", methods=['POST'])
-def Projectnames():
-    content_type1 = request.headers.get('Content-Type')
-    print('==================>', content_type1)
-    category1 = request.json
-    all_json1 = json.dumps(category1)
-    res1 = json.loads(all_json1)
-    URL1 = ProjectName(res1)
-    print(URL1)
-    r = requests.get(url=URL1, headers=headers)
-    data1 = r.json()
-    # pd.DataFrame(res['value'])['owner'].tolist()
-    data1 = json.dumps(data1)
-    return (data1)
-"""
-
+        return "Please select the project"
+    #except:
+        #return "Exception:Please select the project"
 if __name__ == '__main__':
     app.run(debug=True)
 
