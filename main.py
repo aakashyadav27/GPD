@@ -56,9 +56,11 @@ def ntid_mapping(ntid_dict):
     return ntid_dictn
 
 
-@app.route("/", methods=['GET'])
-def hello_world():
-    return render_template('index.html')
+@app.route("/filterData", methods=['GET'])
+def FilterData():
+    with open('filter_data.json') as f:
+        json_data = json.load(f)
+    return json_data
 
 @app.route("/ownerList", methods=['POST'])
 def GetOwnerList():
