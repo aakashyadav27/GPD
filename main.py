@@ -15,10 +15,21 @@ CORS(app)
 data=pd.read_excel('planisware_data_1.xlsx')
 print(data.columns)
 
+# Opening JSON file
+f = open('attributes_mapping.json')
+
+# returns JSON object as
+# a dictionary
+fixer = json.load(f)
 
 sample={
     "value":[]
 }
+def fix_dictionary(dict_,fixer):
+    return { fixer.get(k, k): v for k, v in dict_.items() }
+def lower_dict(d):
+    new_dict = dict((k.lower(), v) for k, v in d.items())
+    return new_dict
 def username_mapping(input_dicto):
     sample1= {
         "value": []
@@ -123,17 +134,16 @@ def Projectnames():
 
 @app.route("/activityData", methods=['POST'])
 def activity_data():
-    final_data={}
+    final_data={"activity":[]}
     input2 = request.json
-    #try:
     print(any(input2.values()))
     if any(input2.values()):
         for x in range(len(input2['value'])):
             new_data=input2['value'][x]['project_name']
             f = open('{}.json'.format(new_data))
-            data = json.load(f)
-            #print(type(data))
-            final_data['activity{}'.format(x)]=data['value'][0]
+            data1 = json.load(f)
+            for x in data1['value'][0]['activity']:
+                final_data['activity'].append(fix_dictionary(x,lower_dict(fixer)))
         data =json.dumps(final_data)
         return data
     else:
