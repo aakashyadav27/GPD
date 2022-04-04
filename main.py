@@ -130,7 +130,12 @@ def Projectnames():
         new_data = sample2
         new_data = json.dumps(new_data)
     return new_data
-
+@app.route("/AttributeNames",methods=["GET"])
+def grouping():
+    f = open('grouping.json')
+    attribute_data = json.load(f)
+    attribute_data = json.dumps(attribute_data)
+    return attribute_data
 
 @app.route("/activityData", methods=['POST'])
 def activity_data():
