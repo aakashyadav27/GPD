@@ -134,7 +134,14 @@ def Projectnames():
 def grouping():
     f = open('grouping.json')
     attribute_data = json.load(f)
-    attribute_data = json.dumps(attribute_data)
+    h = []
+    for key, value in attribute_data.items():
+        v1 = {}
+        v1['group_{}'.format(key)] = key
+        h.append(v1)
+        v1[key] = value
+        v1['checked'] = 'false'
+    attribute_data = json.dumps(h)
     return attribute_data
 
 @app.route("/activityData", methods=['POST'])
