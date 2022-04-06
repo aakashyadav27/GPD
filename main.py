@@ -137,10 +137,11 @@ def grouping():
     h = []
     for key, value in attribute_data.items():
         v1 = {}
-        v1['group_{}'.format(key)] = key
+        v1['group'.format(key)] = key
         h.append(v1)
-        v1[key] = value
         v1['checked'] = 'false'
+        new_key = [{'name': val, 'checked': 'false'} for val in value]
+        v1[key] = new_key
     attribute_data = json.dumps(h)
     return attribute_data
 
