@@ -141,7 +141,7 @@ def grouping():
         h.append(v1)
         v1['checked'] = 'false'
         new_key = [{'name': val, 'checked': 'false'} for val in value]
-        v1[key] = new_key
+        v1['data'] = new_key
     attribute_data = json.dumps(h)
     return attribute_data
 
